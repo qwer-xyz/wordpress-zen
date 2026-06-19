@@ -3,6 +3,12 @@
 <head>
     <meta charset="<?php echo esc_attr(get_bloginfo('charset')); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.toggle('dark', prefersDark);
+        })();
+    </script>
     
     <!-- SEO: Robots Control -->
     <!-- Google 最佳实践：防止索引内部搜索结果页，避免重复内容和爬虫预算浪费 -->
@@ -51,15 +57,15 @@
         
         <!-- Logo / Avatar -->
         <div class="flex items-center gap-4">
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="block shrink-0 group" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?> - 首页">
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="block shrink-0 group zen-ui-link rounded-full" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?> - 首页">
                 <?php 
                 $avatar_url = get_avatar_url(get_option('admin_email'));
                 ?>
                 <img src="<?php echo esc_url($avatar_url); ?>" 
                      alt="" 
-                     class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700 group-hover:ring-gray-300 dark:group-hover:ring-gray-500 transition-all">
+                     class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700 group-hover:ring-gray-300 dark:group-hover:ring-gray-500 transition-all duration-300">
             </a>
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="text-xl font-bold tracking-tight text-gray-900 dark:text-white font-serif hover:opacity-80 transition-opacity">
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="zen-ui-link text-xl font-bold tracking-tight text-gray-900 dark:text-white font-serif hover:opacity-80">
                 <?php echo esc_html(get_bloginfo('name')); ?>
             </a>
         </div>
@@ -83,7 +89,7 @@
 
             <!-- Search Toggle Button -->
             <button id="search-toggle" 
-                    class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors"
+                    class="zen-icon-btn text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
                     aria-label="搜索" 
                     aria-expanded="false" 
                     aria-controls="search-modal">
@@ -92,7 +98,7 @@
 
             <!-- Mobile Menu Button -->
             <button id="mobile-menu-btn" 
-                    class="md:hidden text-gray-900 dark:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    class="zen-icon-btn md:hidden text-gray-900 dark:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
                     aria-expanded="false" 
                     aria-controls="mobile-menu">
                 <span class="screen-reader-text">打开/关闭菜单</span>
@@ -119,49 +125,40 @@
 </header>
 
 <!-- Search Modal (Overlay) -->
-<div id="search-modal" 
-     role="dialog" 
-     aria-modal="true" 
-     aria-label="全站搜索" 
-     class="fixed inset-0 z-50 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md hidden opacity-0 transition-opacity duration-200 flex items-center justify-center p-4">
-    
-    <div class="w-full max-w-2xl relative animate-fade-in-up">
-        <!-- Close Button -->
-        <button id="search-close" 
-                class="absolute -top-16 right-0 md:-right-12 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white text-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 rounded p-1 transition-colors" 
-                aria-label="关闭搜索">
-            <i class="ph ph-x" aria-hidden="true"></i>
-        </button>
+<div id="search-modal"
+     role="dialog"
+     aria-modal="true"
+     aria-label="全站搜索"
+     class="zen-search-modal fixed inset-0 z-50 hidden opacity-0 p-4">
+    <div class="zen-search-backdrop absolute inset-0" data-search-dismiss="true" aria-hidden="true"></div>
 
-        <!-- Search Form -->
-        <form role="search" method="get" class="w-full" action="<?php echo esc_url(home_url('/')); ?>">
-            <label for="search-input" class="screen-reader-text">输入关键词进行搜索</label>
-            <div class="relative group">
-                <!-- 
-                    样式优化：
-                    1. input class: pt-6 pb-2 (上宽下窄，文字贴近横线)
-                    2. p class: mt-10 (拉大底部提示的间距)
-                -->
-                <input type="search" 
-                       id="search-input" 
-                       name="s" 
-                       class="w-full bg-transparent border-0 border-b-2 border-gray-200 dark:border-gray-700 focus:border-gray-900 dark:focus:border-white focus:ring-0 pt-6 pb-2 px-4 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-700 transition-colors text-center serif" 
-                       placeholder="搜索..." 
+    <div class="zen-search-shell relative mx-auto flex min-h-full w-full max-w-3xl items-center justify-center py-12">
+        <div class="zen-search-panel w-full">
+            <button id="search-close"
+                    class="zen-search-close zen-icon-btn"
+                    type="button"
+                    aria-label="关闭搜索">
+                <i class="ph ph-x" aria-hidden="true"></i>
+            </button>
+
+            <div class="zen-search-eyebrow">全站搜索</div>
+
+            <form role="search" method="get" class="zen-search-form" action="<?php echo esc_url(home_url('/')); ?>">
+                <label for="search-input" class="screen-reader-text">输入关键词进行搜索</label>
+                <i class="ph ph-magnifying-glass zen-search-form-icon" aria-hidden="true"></i>
+                <input type="search"
+                       id="search-input"
+                       name="s"
+                       class="zen-search-input"
+                       placeholder="输入关键词"
                        autocomplete="off"
                        value="<?php echo esc_attr(get_search_query(false)); ?>">
-            </div>
-        </form>
-        
-        <p class="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
-            <!-- 桌面端显示快捷键 -->
-            <span class="hidden md:inline">
-                按 <kbd class="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs mx-1">Enter</kbd> 确认，<kbd class="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs mx-1">Esc</kbd> 关闭
-            </span>
-            <!-- 移动端显示点击提示 -->
-            <span class="md:hidden">
-                点击空白区域关闭
-            </span>
-        </p>
+                <button type="submit" class="zen-search-submit">
+                    <span>搜索</span>
+                    <i class="ph ph-arrow-right" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

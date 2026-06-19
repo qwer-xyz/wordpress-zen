@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: ["./**/*.php", "./js/**/*.js"],
-    darkMode: 'media',
+    darkMode: 'class',
     theme: {
         extend: {
             maxWidth: { 'zen': '56rem' },

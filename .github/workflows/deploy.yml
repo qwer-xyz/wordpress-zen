@@ -48,6 +48,8 @@ jobs:
             --exclude 'node_modules' \
             --exclude '.git' \
             --exclude '.github' \
+            --exclude '.agents' \
+            --exclude '.codex' \
             --exclude '.gitignore' \
             --exclude '.vscode' \
             --exclude '.idea' \
@@ -55,6 +57,7 @@ jobs:
             --exclude 'package-lock.json' \
             --exclude 'tailwind.config.js' \
             --exclude 'zen-build' \
+            --exclude 'zen.zip' \
             --exclude 'README.md'
           cd zen-build
           zip -r ../zen.zip zen

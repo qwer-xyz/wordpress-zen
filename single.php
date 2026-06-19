@@ -58,7 +58,7 @@
         
         <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1f1f1f]/50">
             <h3 id="drawer-toc-title" class="text-sm font-bold uppercase tracking-widest text-gray-900 dark:text-white">目录</h3>
-            <button id="drawer-toc-close" class="text-gray-500 hover:text-gray-900 dark:hover:text-white p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500" aria-label="关闭目录">
+            <button id="drawer-toc-close" class="zen-icon-btn text-gray-500 hover:text-gray-900 dark:hover:text-white p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" aria-label="关闭目录">
                 <i class="ph ph-x text-xl"></i>
             </button>
         </div>
@@ -75,7 +75,7 @@
             <?php 
             $cat = zen_get_primary_category();
             if ($cat) {
-                echo '<a href="' . esc_url(get_category_link($cat->term_id)) . '" class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition">' . esc_html($cat->name) . '</a>';
+                echo '<a href="' . esc_url(get_category_link($cat->term_id)) . '" class="zen-ui-link bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">' . esc_html($cat->name) . '</a>';
                 echo '<span class="text-gray-300 dark:text-gray-600">/</span>';
             }
             ?>
@@ -90,21 +90,26 @@
         <?php the_content(); ?>
     </article>
 
-    <div class="mt-12 pt-6 border-t border-gray-100 dark:border-gray-800">
-        <div class="flex flex-wrap gap-2 mb-8">
-            <span class="text-sm text-gray-600 mr-2">标签:</span>
-            <?php 
-            $tags = get_the_tags();
-            if ($tags) {
-                foreach($tags as $tag) {
-                    echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 rounded hover:bg-gray-200 transition">#' . esc_html($tag->name) . '</a> ';
-                }
-            } else {
-                echo '<span class="text-xs text-gray-600">无</span>';
-            }
-            ?>
+        <div class="zen-post-taxonomy mt-12 pt-7 border-t border-gray-100 dark:border-gray-800">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <span class="zen-meta-label">
+                    <i class="ph ph-tag" aria-hidden="true"></i>
+                    标签
+                </span>
+                <div class="zen-tag-list">
+                    <?php
+                    $tags = get_the_tags();
+                    if ($tags) {
+                        foreach ($tags as $tag) {
+                            echo '<a href="' . esc_url(get_tag_link($tag->term_id)) . '" class="zen-tag-pill">#' . esc_html($tag->name) . '</a>';
+                        }
+                    } else {
+                        echo '<span class="zen-tag-empty">暂无标签</span>';
+                    }
+                    ?>
+                </div>
+            </div>
         </div>
-    </div>
 
     <?php 
     if (comments_open() || get_comments_number()) :

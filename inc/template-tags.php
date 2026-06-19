@@ -12,7 +12,7 @@ function zen_posted_on_link() {
     $label = sprintf(__('查看 %s 的所有文章', 'zen'), get_the_date('Y年n月'));
 
     printf(
-        '<a href="%1$s" class="hover:text-gray-900 dark:hover:text-white transition-colors" aria-label="%2$s"><time datetime="%3$s">%4$s</time></a>',
+        '<a href="%1$s" class="zen-ui-link hover:text-gray-900 dark:hover:text-white" aria-label="%2$s"><time datetime="%3$s">%4$s</time></a>',
         esc_url(get_month_link($year, $month)),
         esc_attr($label),
         esc_attr(get_the_date('c')),
@@ -75,6 +75,10 @@ function zen_kses_link($html) {
             'data-respondelement' => true,
         ),
         'span' => array(
+            'aria-hidden' => true,
+            'class' => true,
+        ),
+        'i' => array(
             'aria-hidden' => true,
             'class' => true,
         ),

@@ -1,5 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const colorSchemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    const syncColorScheme = () => {
+        if (!colorSchemeQuery) return;
+        document.documentElement.classList.toggle('dark', colorSchemeQuery.matches);
+    };
+
+    syncColorScheme();
+
+    if (colorSchemeQuery) {
+        if (colorSchemeQuery.addEventListener) {
+            colorSchemeQuery.addEventListener('change', syncColorScheme);
+        } else if (colorSchemeQuery.addListener) {
+            colorSchemeQuery.addListener(syncColorScheme);
+        }
+    }
+
     // --- 1. 代码高亮 ---
     const wpCodeBlocks = document.querySelectorAll('pre.wp-block-code');
     wpCodeBlocks.forEach(block => {
@@ -379,33 +395,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchClose = document.getElementById('search-close');
     const searchInput = document.getElementById('search-input');
     let lastActiveElementBeforeSearch;
+    let searchCloseTimer;
 
     if (searchToggle && searchModal && searchInput) {
         const openSearch = () => {
+            if (searchCloseTimer) clearTimeout(searchCloseTimer);
             lastActiveElementBeforeSearch = document.activeElement;
             searchModal.classList.remove('hidden');
             requestAnimationFrame(() => {
                 searchModal.classList.remove('opacity-0');
+                searchModal.classList.add('is-open');
             });
             document.body.style.overflow = 'hidden';
             searchToggle.setAttribute('aria-expanded', 'true');
-            setTimeout(() => searchInput.focus(), 100);
+            setTimeout(() => searchInput.focus(), 180);
         };
 
         const closeSearch = () => {
+            if (searchModal.classList.contains('hidden')) return;
+            if (searchCloseTimer) clearTimeout(searchCloseTimer);
+            searchModal.classList.remove('is-open');
             searchModal.classList.add('opacity-0');
-            setTimeout(() => {
+            searchCloseTimer = setTimeout(() => {
                 searchModal.classList.add('hidden');
                 document.body.style.overflow = '';
                 if (lastActiveElementBeforeSearch) lastActiveElementBeforeSearch.focus();
-            }, 200);
+            }, 320);
             searchToggle.setAttribute('aria-expanded', 'false');
         };
 
         searchToggle.addEventListener('click', openSearch);
         if (searchClose) searchClose.addEventListener('click', closeSearch);
         searchModal.addEventListener('click', (e) => {
-            if (e.target === searchModal) closeSearch();
+            if (e.target === searchModal || e.target.closest('[data-search-dismiss="true"]')) closeSearch();
         });
 
         document.addEventListener('keydown', (e) => {
