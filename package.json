@@ -1,0 +1,29 @@
+{
+  "name": "zen",
+  "version": "1.0.0",
+  "description": "WordPress Zen Theme",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --minify"
+  },
+  "keywords": [],
+  "author": "qwer-xyz",
+  "homepage": "https://github.com/qwer-xyz/wordpress-zen",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qwer-xyz/wordpress-zen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qwer-xyz/wordpress-zen/issues"
+  },
+  "license": "GPL-3.0-or-later",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
+  }
+}

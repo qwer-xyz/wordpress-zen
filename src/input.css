@@ -1,0 +1,368 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, h4, h5, h6, .serif { font-family: 'Noto Serif SC', serif; }
+}
+
+@layer components {
+    @keyframes zen-fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes zen-fade-in-up {
+        from { opacity: 0; transform: translateY(0.75rem); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+        animation: zen-fade-in 0.35s ease-out both;
+    }
+
+    .animate-fade-in-up {
+        animation: zen-fade-in-up 0.35s ease-out both;
+    }
+
+    .post-divider {
+        @apply h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent dark:via-gray-700;
+    }
+
+    .comment-list,
+    .comment-list .children {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .comment-list {
+        padding-top: 1rem;
+    }
+
+    .comment-list > li {
+        margin-bottom: 3rem;
+    }
+
+    .comment-list .children {
+        margin-top: 2rem;
+        margin-left: 0.5rem;
+        padding-left: 1rem;
+        border-left: 2px solid #e5e7eb;
+    }
+
+    .comment-list .children > li {
+        margin-top: 2rem;
+        position: relative;
+    }
+
+    #submit {
+        background-image: none;
+        background-color: #111827;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    #submit:hover,
+    #submit:focus {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+
+    .skip-link {
+        position: absolute;
+        top: -9999px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000;
+        color: #fff;
+        padding: 1rem 2rem;
+        z-index: 9999;
+        text-decoration: none;
+        border-radius: 0 0 4px 4px;
+        font-weight: bold;
+    }
+
+    .skip-link:focus {
+        top: 0;
+        outline: 3px solid #3b82f6;
+    }
+
+    .toc-link {
+        display: block;
+        padding: 0.375rem 0;
+        border-left: 2px solid transparent;
+        margin-left: -1px;
+        color: #6b7280;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .toc-link:hover,
+    .toc-link:focus {
+        color: #111827;
+    }
+
+    .toc-link.active {
+        @apply text-gray-900 dark:text-white font-medium border-l-2 border-gray-900 dark:border-white pl-[calc(1rem-2px)];
+    }
+
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #e5e7eb transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #e5e7eb;
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+        background-color: #d1d5db;
+    }
+
+    .zen-audio-player {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 9999px;
+        margin: 2rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .zen-audio-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: #111827;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        border: none;
+        padding: 0;
+    }
+
+    .zen-audio-btn:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+    }
+
+    .zen-audio-progress-container {
+        flex-grow: 1;
+        height: 4px;
+        background: #9ca3af;
+        border-radius: 2px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .zen-audio-progress-bar {
+        height: 100%;
+        background: #111827;
+        border-radius: 2px;
+        width: 0;
+        position: relative;
+    }
+
+    .zen-audio-time {
+        font-size: 0.75rem;
+        font-family: monospace;
+        color: #4b5563;
+        min-width: 40px;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .wp-block-file {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 1rem 1.5rem;
+        margin: 2rem 0;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s;
+    }
+
+    .wp-block-file:hover {
+        border-color: #9ca3af;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .wp-block-file a:first-child {
+        font-weight: 500;
+        color: #111827;
+        text-decoration: none;
+        border: none;
+    }
+
+    .wp-block-file .wp-block-file__button {
+        background: #111827;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        text-decoration: none;
+        border: none;
+        transition: opacity 0.2s;
+    }
+
+    .wp-block-file .wp-block-file__button:hover {
+        opacity: 0.9;
+    }
+
+    .wp-block-embed iframe {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border-radius: 0.5rem;
+    }
+
+    .prose pre,
+    .wp-block-code {
+        overflow-x: auto;
+        max-width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .comment-list .children {
+            margin-left: 3.5rem;
+            padding-left: 2rem;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        #submit {
+            background-color: #27272a;
+            color: #e5e7eb;
+            border: 1px solid #3f3f46;
+        }
+
+        #submit:hover,
+        #submit:focus {
+            background-color: #3f3f46;
+            color: #fff;
+        }
+
+        .skip-link {
+            background: #fff;
+            color: #000;
+        }
+
+        .comment-list .children {
+            border-color: #374151;
+        }
+
+        .toc-link {
+            color: #9ca3af;
+        }
+
+        .toc-link:hover,
+        .toc-link:focus {
+            color: #fff;
+        }
+
+        .custom-scrollbar {
+            scrollbar-color: #374151 transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #374151;
+        }
+
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+        }
+
+        .zen-audio-player {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        .zen-audio-btn {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .zen-audio-progress-container {
+            background: #4b5563;
+        }
+
+        .zen-audio-progress-bar {
+            background: #e5e7eb;
+        }
+
+        .zen-audio-time {
+            color: #d1d5db;
+        }
+
+        .wp-block-file {
+            background: #18181b;
+            border-color: #27272a;
+        }
+
+        .wp-block-file:hover {
+            border-color: #52525b;
+        }
+
+        .wp-block-file a:first-child {
+            color: #f4f4f5;
+        }
+
+        .wp-block-file .wp-block-file__button {
+            background: #fff;
+            color: #000;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-fade-in,
+        .animate-fade-in-up {
+            animation: none;
+        }
+    }
+}
+
+@layer utilities {
+    .screen-reader-text {
+        border: 0;
+        clip: rect(1px, 1px, 1px, 1px);
+        -webkit-clip-path: inset(50%);
+        clip-path: inset(50%);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+        word-wrap: normal !important;
+    }
+}
