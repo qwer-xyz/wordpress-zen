@@ -15,7 +15,14 @@ function zen_scripts() {
         wp_enqueue_script('highlight-js', get_template_directory_uri() . '/assets/js/highlight.min.js', array(), $ver, true);
     }
 
-    wp_enqueue_script('zen-main', get_template_directory_uri() . '/js/main.js', array(), $ver, true);
+    $main_js = get_template_directory() . '/js/main.js';
+    wp_enqueue_script(
+        'zen-main',
+        get_template_directory_uri() . '/js/main.js',
+        array(),
+        file_exists($main_js) ? filemtime($main_js) : $ver,
+        true
+    );
 
     $compiled_css = get_template_directory() . '/assets/css/style.css';
     if (file_exists($compiled_css)) {

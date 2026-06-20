@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         (function() {
+            var storageKey = 'zen-theme-mode';
+            var mode = 'auto';
+            try {
+                var storedMode = window.localStorage && window.localStorage.getItem(storageKey);
+                if (storedMode === 'light' || storedMode === 'dark' || storedMode === 'auto') {
+                    mode = storedMode;
+                }
+            } catch (error) {}
+
             var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.classList.toggle('dark', prefersDark);
+            var isDark = mode === 'dark' || (mode === 'auto' && prefersDark);
+            document.documentElement.classList.toggle('dark', isDark);
+            document.documentElement.dataset.themeMode = mode;
+            document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
         })();
     </script>
     
@@ -42,7 +54,7 @@
 
     <?php wp_head(); ?>
 </head>
-<body <?php body_class('bg-white text-gray-900 dark:bg-[#121212] dark:text-gray-200 transition-colors duration-300 min-h-screen flex flex-col relative'); ?>>
+<body <?php body_class('transition-colors duration-300 min-h-screen flex flex-col relative'); ?>>
 <?php wp_body_open(); ?>
 
 <!-- A11y: Skip Link -->
@@ -52,7 +64,7 @@
 <div id="reading-progress" aria-hidden="true" class="fixed top-0 left-0 h-1 bg-gray-900 dark:bg-white z-50 transition-all duration-100 ease-out w-0"></div>
 
 <!-- Header -->
-<header role="banner" class="w-full border-b border-gray-100 dark:border-gray-800 transition-colors bg-white/80 dark:bg-[#121212]/80 backdrop-blur-md sticky top-0 z-40">
+<header role="banner" class="zen-site-header w-full transition-colors backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-zen mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
         
         <!-- Logo / Avatar -->
@@ -71,15 +83,15 @@
         </div>
 
         <!-- Right Actions Container -->
-        <div class="flex items-center gap-4 md:gap-6">
+        <div class="zen-header-actions flex items-center">
             
             <!-- Desktop Navigation -->
-            <nav role="navigation" aria-label="主菜单" class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-400">
+            <nav role="navigation" aria-label="主菜单" class="hidden md:flex items-center text-sm font-medium text-gray-600 dark:text-gray-400">
                 <?php
                 wp_nav_menu(array(
                     'theme_location' => 'primary',
                     'container'      => false,
-                    'menu_class'     => 'flex items-center gap-6 list-none m-0 p-0',
+                    'menu_class'     => 'flex items-center gap-5 list-none m-0 p-0',
                     'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
                     'fallback_cb'    => false,
                     'depth'          => 1,
@@ -87,28 +99,40 @@
                 ?>
             </nav>
 
-            <!-- Search Toggle Button -->
-            <button id="search-toggle" 
-                    class="zen-icon-btn text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    aria-label="搜索" 
-                    aria-expanded="false" 
-                    aria-controls="search-modal">
-                <i class="ph ph-magnifying-glass text-xl md:text-lg" aria-hidden="true"></i>
-            </button>
+            <div class="zen-header-tools">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle"
+                        class="zen-theme-toggle zen-header-tool zen-icon-btn"
+                        type="button"
+                        aria-label="切换主题"
+                        title="跟随系统">
+                    <i class="ph ph-circle-half text-xl md:text-lg" aria-hidden="true"></i>
+                    <span class="screen-reader-text" data-theme-toggle-label>跟随系统</span>
+                </button>
 
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" 
-                    class="zen-icon-btn md:hidden text-gray-900 dark:text-white p-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    aria-expanded="false" 
-                    aria-controls="mobile-menu">
-                <span class="screen-reader-text">打开/关闭菜单</span>
-                <i class="ph ph-list text-2xl" aria-hidden="true"></i>
-            </button>
+                <!-- Search Toggle Button -->
+                <button id="search-toggle"
+                        class="zen-header-tool zen-icon-btn"
+                        aria-label="搜索"
+                        aria-expanded="false"
+                        aria-controls="search-modal">
+                    <i class="ph ph-magnifying-glass text-xl md:text-lg" aria-hidden="true"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn"
+                        class="zen-header-tool zen-icon-btn md:hidden"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu">
+                    <span class="screen-reader-text">打开/关闭菜单</span>
+                    <i class="ph ph-list text-2xl" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full bg-white dark:bg-[#121212] border-b border-gray-100 dark:border-gray-800 p-4 shadow-lg animate-fade-in z-40">
+    <div id="mobile-menu" class="zen-mobile-menu hidden md:hidden absolute top-20 left-0 w-full p-4 shadow-lg animate-fade-in z-40">
         <nav aria-label="移动端菜单" class="flex flex-col gap-4 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
             <?php
             wp_nav_menu(array(

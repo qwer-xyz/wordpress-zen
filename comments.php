@@ -47,7 +47,7 @@ if (post_password_required()) return;
 
             $args = array(
                 'fields' => $fields,
-                'comment_field' => '<p class="comment-form-comment"><label for="comment">你的想法 ' . $comment_required . '</label><textarea id="comment" name="comment" rows="5" class="zen-comment-input min-h-36 resize-y px-4 py-3" aria-required="true" placeholder="写点什么..."></textarea></p>',
+                'comment_field' => '<p class="comment-form-comment"><label for="comment">你的想法 ' . $comment_required . '</label><textarea id="comment" name="comment" rows="2" class="zen-comment-input resize-y px-4 py-3" aria-required="true" placeholder="写点什么..."></textarea></p>',
                 'class_container' => 'comment-respond zen-comment-panel p-5 sm:p-7 mb-12',
                 'class_submit' => 'zen-submit',
                 'label_submit' => '发布评论',

@@ -1,19 +1,78 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const colorSchemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
-    const syncColorScheme = () => {
-        if (!colorSchemeQuery) return;
-        document.documentElement.classList.toggle('dark', colorSchemeQuery.matches);
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleIcon = themeToggle ? themeToggle.querySelector('i') : null;
+    const themeToggleLabel = themeToggle ? themeToggle.querySelector('[data-theme-toggle-label]') : null;
+    const themeStorageKey = 'zen-theme-mode';
+    const themeModes = ['auto', 'light', 'dark'];
+    const themeMeta = {
+        auto: { icon: 'ph-circle-half', label: '跟随系统' },
+        light: { icon: 'ph-sun', label: '浅色模式' },
+        dark: { icon: 'ph-moon', label: '深色模式' },
+    };
+    let themeMode = 'auto';
+
+    const getStoredThemeMode = () => {
+        try {
+            const storedMode = window.localStorage.getItem(themeStorageKey);
+            return themeModes.includes(storedMode) ? storedMode : 'auto';
+        } catch (error) {
+            return 'auto';
+        }
     };
 
-    syncColorScheme();
+    const setStoredThemeMode = (mode) => {
+        try {
+            window.localStorage.setItem(themeStorageKey, mode);
+        } catch (error) {}
+    };
+
+    const applyThemeMode = (mode) => {
+        const prefersDark = colorSchemeQuery ? colorSchemeQuery.matches : false;
+        const isDark = mode === 'dark' || (mode === 'auto' && prefersDark);
+        const meta = themeMeta[mode] || themeMeta.auto;
+
+        document.documentElement.classList.toggle('dark', isDark);
+        document.documentElement.dataset.themeMode = mode;
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-label', '切换主题：' + meta.label);
+            themeToggle.setAttribute('title', meta.label);
+        }
+
+        if (themeToggleLabel) {
+            themeToggleLabel.textContent = meta.label;
+        }
+
+        if (themeToggleIcon) {
+            themeToggleIcon.className = 'ph ' + meta.icon + ' text-xl md:text-lg';
+        }
+    };
+
+    themeMode = getStoredThemeMode();
+    applyThemeMode(themeMode);
 
     if (colorSchemeQuery) {
+        const handleSystemThemeChange = () => {
+            if (themeMode === 'auto') applyThemeMode(themeMode);
+        };
+
         if (colorSchemeQuery.addEventListener) {
-            colorSchemeQuery.addEventListener('change', syncColorScheme);
+            colorSchemeQuery.addEventListener('change', handleSystemThemeChange);
         } else if (colorSchemeQuery.addListener) {
-            colorSchemeQuery.addListener(syncColorScheme);
+            colorSchemeQuery.addListener(handleSystemThemeChange);
         }
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentIndex = themeModes.indexOf(themeMode);
+            themeMode = themeModes[(currentIndex + 1) % themeModes.length];
+            setStoredThemeMode(themeMode);
+            applyThemeMode(themeMode);
+        });
     }
 
     // --- 1. 代码高亮 ---

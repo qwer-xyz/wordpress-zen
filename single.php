@@ -30,7 +30,7 @@
     -->
     <button id="floating-toc-btn" 
             class="xl:hidden fixed right-0 top-1/2 -translate-y-1/2 z-50 
-                   bg-white dark:bg-[#1a1a1a] p-3 rounded-l-lg 
+                   zen-floating-toc-btn p-3 rounded-l-lg 
                    shadow-lg hover:shadow-xl dark:shadow-none dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.15)]
                    border-y border-l border-gray-200 dark:border-gray-700 
                    text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
@@ -50,13 +50,13 @@
     <div id="toc-overlay" class="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur-sm z-[60] hidden transition-opacity opacity-0" aria-hidden="true"></div>
     
     <aside id="drawer-toc" 
-           class="fixed top-0 right-0 w-80 h-full bg-white dark:bg-[#1a1a1a] z-[70] transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col border-l border-gray-100 dark:border-gray-800" 
+           class="zen-toc-drawer fixed top-0 right-0 w-80 h-full z-[70] transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col" 
            role="dialog" 
            aria-modal="true" 
            aria-labelledby="drawer-toc-title"
            inert>
         
-        <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1f1f1f]/50">
+        <div class="zen-toc-drawer-header flex items-center justify-between p-6">
             <h3 id="drawer-toc-title" class="text-sm font-bold uppercase tracking-widest text-gray-900 dark:text-white">目录</h3>
             <button id="drawer-toc-close" class="zen-icon-btn text-gray-500 hover:text-gray-900 dark:hover:text-white p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500" aria-label="关闭目录">
                 <i class="ph ph-x text-xl"></i>
@@ -91,7 +91,7 @@
     </article>
 
         <div class="zen-post-taxonomy mt-12 pt-7 border-t border-gray-100 dark:border-gray-800">
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="zen-taxonomy-row">
                 <span class="zen-meta-label">
                     <i class="ph ph-tag" aria-hidden="true"></i>
                     标签
