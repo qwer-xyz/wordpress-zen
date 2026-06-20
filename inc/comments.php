@@ -34,8 +34,8 @@ function zen_comment_callback($comment, $args, $depth) {
                     ?>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <header class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
+                    <header class="zen-comment-header mb-1">
+                        <div class="min-w-0">
                             <h4 class="text-sm font-bold text-gray-900 dark:text-white"><?php echo esc_html(get_comment_author()); ?></h4>
                             <?php if ('0' === $comment->comment_approved) : ?>
                                 <p class="mt-1 text-xs text-amber-600 dark:text-amber-400">评论正在等待审核。</p>

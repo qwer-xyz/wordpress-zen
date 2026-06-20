@@ -430,6 +430,13 @@
         color: #dc2626;
     }
 
+    .zen-comment-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
     .zen-comment-meta {
         display: inline-flex;
         align-items: center;
@@ -492,8 +499,22 @@
 
     .zen-comment-meta .comment-reply-link {
         min-height: 1.65rem;
-        padding: 0.28rem 0.56rem;
+        border-color: transparent;
+        background: transparent;
+        padding: 0;
         font-size: 0.75rem;
+        box-shadow: none;
+    }
+
+    .zen-comment-meta .comment-reply-link:hover,
+    .zen-comment-meta .comment-reply-link:focus-visible {
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .zen-comment-card .prose p:first-child {
+        margin-top: 0;
     }
 
     .comment-form {
@@ -1096,6 +1117,19 @@
         .comment-list .children {
             margin-left: 1rem;
             padding-left: 0.85rem;
+        }
+
+        .zen-comment-header {
+            gap: 0.55rem;
+        }
+
+        .zen-comment-meta {
+            gap: 0.4rem;
+        }
+
+        .zen-comment-meta .comment-reply-link {
+            min-height: 1.55rem;
+            padding: 0;
         }
     }
 

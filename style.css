@@ -3,7 +3,7 @@ Theme Name: WordPress Zen Theme
 Theme URI: https://github.com/qwer-xyz/wordpress-zen
 Author: qwer-xyz
 Author URI: https://github.com/qwer-xyz
-Description: Zen 是一个基于极简主义设计理念构建的 WordPress 主题。它专注于排版、留白和沉浸式阅读体验，旨在为博主和读者提供一个无干扰、高性能的数字空间。
+Description: A minimal WordPress theme focused on typography, calm spacing, and immersive reading.
 Version: 1.0.0
 License: GNU General Public License v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -11,12 +11,11 @@ Text Domain: zen
 Tags: one-column, accessibility-ready, blog, custom-menu, dark-mode
 */
 
-/* 
- * 这里的样式主要用于补充 Tailwind 无法覆盖的 WordPress 特殊类
- * 或者是为了处理一些遗留问题。大部分样式通过 Tailwind 类在模板中处理。
+/*
+ * WordPress compatibility styles. Most theme styling is compiled from
+ * src/input.css into assets/css/style.css.
  */
 
-/* 屏幕阅读器文本隐藏 */
 .screen-reader-text {
     border: 0;
     clip: rect(1px, 1px, 1px, 1px);
@@ -31,7 +30,6 @@ Tags: one-column, accessibility-ready, blog, custom-menu, dark-mode
     word-wrap: normal !important;
 }
 
-/* 评论嵌套层级 */
 .children {
     margin-left: 0;
     padding-left: 0;
