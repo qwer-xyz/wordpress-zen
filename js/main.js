@@ -384,11 +384,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const progressContainer = document.createElement('div');
         progressContainer.className = 'zen-audio-progress-container';
-        progressContainer.setAttribute('role', 'progressbar');
+        progressContainer.setAttribute('role', 'slider');
+        progressContainer.setAttribute('tabindex', '0');
         progressContainer.setAttribute('aria-valuenow', '0');
         progressContainer.setAttribute('aria-valuemin', '0');
         progressContainer.setAttribute('aria-valuemax', '100');
         progressContainer.setAttribute('aria-label', '音频播放进度');
+        progressContainer.setAttribute('aria-valuetext', '0%');
 
         const progressBar = document.createElement('div');
         progressBar.className = 'zen-audio-progress-bar';
@@ -396,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const timeDisplay = document.createElement('div');
         timeDisplay.className = 'zen-audio-time';
-        timeDisplay.innerText = '00:00';
+        timeDisplay.innerText = '00:00 / --:--';
         timeDisplay.setAttribute('aria-hidden', 'true');
 
         player.appendChild(btn);
@@ -404,6 +406,22 @@ document.addEventListener('DOMContentLoaded', () => {
         player.appendChild(timeDisplay);
         audio.parentNode.insertBefore(player, audio.nextSibling);
         audio.style.display = 'none';
+
+        const formatAudioTime = (seconds) => {
+            if (!Number.isFinite(seconds) || seconds < 0) return '--:--';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        };
+
+        const updateAudioUI = () => {
+            const hasDuration = Number.isFinite(audio.duration) && audio.duration > 0;
+            const percent = hasDuration ? (audio.currentTime / audio.duration) * 100 : 0;
+            progressBar.style.width = percent + '%';
+            progressContainer.setAttribute('aria-valuenow', Math.round(percent));
+            progressContainer.setAttribute('aria-valuetext', Math.round(percent) + '%');
+            timeDisplay.innerText = `${formatAudioTime(audio.currentTime)} / ${formatAudioTime(audio.duration)}`;
+        };
 
         btn.addEventListener('click', () => {
             if (audio.paused) {
@@ -418,14 +436,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         audio.addEventListener('timeupdate', () => {
-            if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
-            const percent = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = percent + '%';
-            progressContainer.setAttribute('aria-valuenow', Math.round(percent));
-            const minutes = Math.floor(audio.currentTime / 60);
-            const seconds = Math.floor(audio.currentTime % 60);
-            timeDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            updateAudioUI();
         });
+
+        audio.addEventListener('loadedmetadata', updateAudioUI);
 
         progressContainer.addEventListener('click', (e) => {
             const rect = progressContainer.getBoundingClientRect();
@@ -434,10 +448,29 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.currentTime = (clickX / rect.width) * audio.duration;
         });
 
+        progressContainer.addEventListener('keydown', (e) => {
+            if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+
+            const step = Math.max(audio.duration * 0.05, 5);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                audio.currentTime = Math.max(0, audio.currentTime - step);
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                audio.currentTime = 0;
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                audio.currentTime = audio.duration;
+            }
+        });
+
         audio.addEventListener('ended', () => {
             btn.innerHTML = '<i class="ph ph-play text-lg" aria-hidden="true"></i>';
             btn.setAttribute('aria-label', '播放音频');
-            progressBar.style.width = '0%';
+            updateAudioUI();
         });
     });
 
